@@ -1,1 +1,2 @@
 *.tfbackend
+**/backend.hcl

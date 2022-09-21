@@ -8,8 +8,8 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "awspersonal"
+  region  = var.aws_region
+  profile = var.aws_profile
 }
 
 data "aws_caller_identity" "current" {}
@@ -20,13 +20,9 @@ resource "aws_kms_key" "kms_key_tfstate" {
 }
 
 resource "aws_s3_bucket" "bucket_tfstate" {
-  bucket = "cipp-terraform-state-${data.aws_caller_identity.current.account_id}"
+  bucket = local.bucket_name
 
   force_destroy = false
-
-  tags = {
-    component = "cipp"
-  }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_ssencryption_tfstate" {
@@ -52,16 +48,12 @@ resource "aws_s3_bucket_versioning" "versioning_tfstate" {
   }
 }
 
-resource "aws_dynamodb_table" "tfstate_locks" {
-  name         = "cipp-terraform-lock-${data.aws_caller_identity.current.account_id}"
+resource "aws_dynamodb_table" "dynamodb_tfstate" {
+  name         = local.dynamodb_table_name
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {
     name = "LockID"
     type = "S"
-  }
-
-  tags = {
-    component = "cipp"
   }
 }

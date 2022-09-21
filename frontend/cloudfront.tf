@@ -1,5 +1,5 @@
 resource "aws_cloudfront_origin_access_identity" "cf_identity" {
-  comment = local.app_name_default
+  comment = local.cloudfront_name
 }
 
 resource "aws_cloudfront_distribution" "s3_distribution" {
@@ -20,7 +20,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   logging_config {
     include_cookies = false
     bucket          = aws_s3_bucket.logs.bucket_domain_name
-    prefix          = "${local.app_name_default}-cdn/"
+    prefix          = "cdn/"
   }
 
   aliases = []

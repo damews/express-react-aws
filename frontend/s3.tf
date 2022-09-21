@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "website" {
-  bucket        = "${local.app_name_default}-website-${terraform.workspace}-${data.aws_caller_identity.current.account_id}"
-  
+  bucket = local.website_bucket_name
+
   force_destroy = false
 
   tags = local.common_tags
@@ -41,7 +41,7 @@ resource "aws_s3_bucket_website_configuration" "bucket_website_configuration" {
 
 
 resource "aws_s3_bucket" "logs" {
-  bucket        = "${local.app_name_default}-logs-${terraform.workspace}-${data.aws_caller_identity.current.account_id}"
+  bucket        = local.logs_bucket_name
   force_destroy = false
 
   tags = local.common_tags
